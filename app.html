@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Мои лекарства</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Навигация">
+      <div class="sidebar__top">
+        <div class="avatar" aria-hidden="true"></div>
+        <div class="sidebar__user">
+          <span class="sidebar__user-icon" aria-hidden="true">👤</span>
+          <span id="current-user-name" class="sidebar__user-name">Пользователь</span>
+        </div>
+      </div>
+
+      <nav class="sidebar__nav" aria-label="Разделы">
+        <button type="button" class="app-nav__btn is-active" data-view="medications">
+          <span class="nav-ico" aria-hidden="true">📋</span> Мои лекарства
+        </button>
+        <button type="button" class="app-nav__btn" data-view="calendar">
+          <span class="nav-ico" aria-hidden="true">🗓️</span> Календарь
+        </button>
+        <button type="button" class="app-nav__btn" data-view="history">
+          <span class="nav-ico" aria-hidden="true">🕘</span> История
+        </button>
+        <button type="button" class="app-nav__btn" data-view="settings">
+          <span class="nav-ico" aria-hidden="true">⚙️</span> Настройки
+        </button>
+      </nav>
+
+      <div class="sidebar__bottom">
+        <button type="button" id="btn-logout" class="btn-logout">
+          <span class="nav-ico" aria-hidden="true">🚪</span> Выйти
+        </button>
+      </div>
+    </aside>
+
+    <main class="content">
+      <header class="content-header">
+        <div class="content-header__title">
+          <span class="content-header__ico" aria-hidden="true">🗒️</span>
+          <h1 id="page-title">Мои лекарства</h1>
+        </div>
+        <button type="button" id="btn-add-med" class="fab" aria-label="Добавить лекарство">+</button>
+      </header>
+
+      <section class="content-body">
+
+        <!-- ВКЛАДКА: МОИ ЛЕКАРСТВА -->
+        <div id="view-medications" class="view">
+          <div id="medications-list" class="med-cards" aria-label="Список лекарств"></div>
+          <p id="medications-empty" class="empty-state empty-state--light">Пока нет лекарств — нажмите «+», чтобы добавить.</p>
+        </div>
+
+        <!-- ВКЛАДКА: КАЛЕНДАРЬ -->
+        <div id="view-calendar" class="view" hidden>
+          <div class="panel panel--light">
+            <div class="calendar-year-title">
+              <span class="calendar-year-title__ico" aria-hidden="true">🗓️</span>
+              <span id="cal-year-title">2026 год</span>
+            </div>
+
+            <div class="calendar-widget" aria-label="Календарь">
+              <div class="calendar-widget__header">
+                <button type="button" id="cal-prev" class="cal-nav" aria-label="Предыдущий месяц">◀</button>
+                <div class="calendar-widget__label" id="cal-month-label">Апрель 2026г.</div>
+                <button type="button" id="cal-next" class="cal-nav" aria-label="Следующий месяц">▶</button>
+              </div>
+
+              <div class="calendar-widget__weekdays" aria-hidden="true">
+                <span>П</span><span>В</span><span>С</span><span>Ч</span><span>П</span><span>С</span><span>В</span>
+              </div>
+              <div id="calendar-grid" class="calendar-widget__grid" role="grid" aria-label="Дни месяца"></div>
+            </div>
+
+            <div id="cal-day-panel" class="cal-day-panel" aria-label="Лекарства на выбранную дату">
+              <div class="cal-day-panel__header">
+                <strong id="cal-selected-date">—</strong>
+                <span class="muted small">Лекарства на день</span>
+              </div>
+              <div id="cal-day-list" class="cal-day-list"></div>
+              <p id="cal-day-empty" class="empty-state empty-state--light" hidden>На эту дату нет лекарств.</p>
+            </div>
+
+            <p class="hint muted">Цвета: зелёный — «принято», красный — «не принято», жёлтый — было по расписанию.</p>
+          </div>
+        </div>
+
+        <!-- ВКЛАДКА: ИСТОРИЯ -->
+        <div id="view-history" class="view" hidden>
+          <!-- Блок "Сегодня" -->
+          <div class="panel panel--light" style="margin-bottom: 1.5rem;">
+            <h2>📅 Расписание на сегодня</h2>
+            <div id="today-schedule" class="today-schedule">
+              <!-- Сюда JavaScript добавит расписание на сегодня -->
+            </div>
+            <div id="today-empty" class="empty-state" hidden>
+              На сегодня нет запланированных лекарств.
+            </div>
+          </div>
+          
+          <div class="panel panel--light">
+            <div class="history-toolbar">
+              <h2>История приёма</h2>
+              <label class="field field--inline">
+                <span>Фильтр</span>
+                <select id="history-filter">
+                  <option value="all">Все</option>
+                  <option value="taken">Принято</option>
+                  <option value="skipped">Не принято</option>
+                </select>
+              </label>
+            </div>
+
+            <div id="history-med-list" class="history-med-list" aria-label="Список лекарств по статусу"></div>
+            <p id="history-med-empty" class="empty-state empty-state--light" hidden>
+              Нет записей по выбранному фильтру.
+            </p>
+
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Дата</th>
+                    <th>Время</th>
+                    <th>Лекарство</th>
+                    <th>Статус</th>
+                  </tr>
+                </thead>
+                <tbody id="history-body"></tbody>
+              </table>
+            </div>
+            <p id="history-empty" class="empty-state empty-state--light" hidden>
+              История пуста — отметьте приём в расписании.
+            </p>
+          </div>
+        </div>
+
+        <!-- ВКЛАДКА: НАСТРОЙКИ -->
+        <div id="view-settings" class="view" hidden>
+          <div class="panel panel--light">
+            <h2>Уведомления</h2>
+            <p class="muted small">
+              Нажмите кнопку ниже, чтобы браузер попросил разрешение на уведомления. После этого уведомления будут приходить в время приёма, пока открыт <code>app.html</code>.
+            </p>
+            <div class="reminder-form__actions">
+              <button type="button" id="btn-enable-notifications" class="btn btn--primary">
+                Включить уведомления
+              </button>
+              <button type="button" id="btn-test-notification" class="btn btn--ghost">
+                Тест уведомления
+              </button>
+            </div>
+            <p id="notifications-status" class="reminder-status muted" role="status"></p>
+          </div>
+
+          <div class="panel panel--light panel--qr" style="margin-top: 1.25rem;">
+            <h2>QR-код для входа</h2>
+            <p class="muted small">
+              Отсканируйте камерой телефона. Сервер в PowerShell должен быть запущен, телефон — в той же Wi‑Fi.
+            </p>
+            <label class="field">
+              <span>IP компьютера (из PowerShell: Available on)</span>
+              <input type="text" id="settings-lan-ip" placeholder="10.30.221.125" autocomplete="off" />
+            </label>
+            <div class="reminder-form__actions">
+              <button type="button" id="btn-update-qr" class="btn btn--primary">QR для телефона</button>
+              <button type="button" id="btn-qr-this-pc" class="btn btn--ghost">QR для этого ПК</button>
+            </div>
+            <div class="settings-qr-wrap">
+              <img id="settings-qr-img" class="settings-qr-fallback" width="220" height="220" alt="QR-код для входа" />
+              <p id="settings-qr-url" class="settings-qr-url muted small"></p>
+            </div>
+            <p class="hint muted"><code>127.0.0.1</code> — только на этом ПК. Для телефона введите IP <code>10.x.x.x</code>.</p>
+          </div>
+
+          <div class="panel panel--light" style="margin-top: 1.25rem;">
+            <h2>Доступность</h2>
+            <p class="muted small">
+             
+            </p>
+            <form id="form-accessibility" class="reminder-form">
+              <label class="field">
+                <span>Размер шрифта</span>
+                <select name="fontScale" aria-label="Размер шрифта">
+                  <option value="normal">Обычный</option>
+                  <option value="large">Крупный</option>
+                </select>
+              </label>
+              <p class="hint muted"> </p>
+              <div class="reminder-form__actions">
+                <button type="submit" class="btn btn--primary">Сохранить оформление</button>
+              </div>
+            </form>
+            <p id="accessibility-status" class="reminder-status muted" role="status" hidden></p>
+          </div>
+        </div>
+
+      </section>
+    </main>
+
+    <div id="modal-med" class="modal" hidden aria-hidden="true">
+      <div class="modal__backdrop" data-close-modal="1"></div>
+      <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="modal-med-title">
+        <div class="modal__header">
+          <h2 id="modal-med-title">Добавить лекарство</h2>
+          <button type="button" class="icon-btn" data-close-modal="1" aria-label="Закрыть">✕</button>
+        </div>
+        <form id="form-medication" class="modal__form" novalidate>
+          <input type="hidden" name="editId" value="" />
+          <label class="field">
+            <span>Название</span>
+            <input type="text" name="medicationName" required maxlength="120" placeholder="Например: Парацетамол" autocomplete="off" />
+          </label>
+          <div class="modal__row">
+            <label class="field field--grow">
+              <span>Дозировка</span>
+              <input type="text" name="dose" maxlength="40" placeholder="Например: 500 мг" autocomplete="off" />
+            </label>
+            <label class="field field--grow">
+              <span>Примечание</span>
+              <input type="text" name="note" maxlength="80" placeholder="Например: После еды" autocomplete="off" />
+            </label>
+          </div>
+          <label class="field">
+            <span>Время приёма (через запятую)</span>
+            <input type="text" name="times" required placeholder="08:00, 14:00, 20:00" />
+          </label>
+          <p class="hint muted">Укажите часы в формате ЧЧ:ММ (24 часа), несколько через запятую.</p>
+          <div class="modal__actions">
+            <button type="button" class="btn btn--ghost" data-close-modal="1">Отмена</button>
+            <button type="submit" class="btn btn--primary" id="btn-save-med">Сохранить</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="public/index.js"></script>
+  <script src="js/app.js?v=3"></script>
+</body>
+</html>

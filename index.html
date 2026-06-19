@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Вход — Напоминания о лекарствах</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,600;1,8..60,500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/auth.css" />
+</head>
+<body class="auth-page">
+  <div class="auth-layout">
+    <div class="auth-hero" aria-hidden="false">
+      <div class="auth-hero__inner">
+        <span class="auth-hero__badge">Здоровье · Расписание</span>
+        <h1>Приём лекарств без суеты</h1>
+        <p>
+          Записывайте лекарства, отмечайте приём и получайте напоминания. Всё в одном месте, данные хранятся браузере.
+        </p>
+        <div class="auth-hero__pills">
+          <span class="auth-pill">Календарь</span>
+          <span class="auth-pill">История</span>
+          <span class="auth-pill">SMS напоминания</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="auth-panel">
+      <div class="auth-card">
+        <div class="auth-card__logo" aria-hidden="true">💊</div>
+        <h2 class="auth-card__title">Добро пожаловать</h2>
+        <p class="auth-card__subtitle">Войдите по имени пользователя или создайте аккаунт</p>
+
+        <!-- === ОСНОВНОЙ КОНТЕНТ (вход/регистрация) === -->
+        <div id="authMainContent">
+          
+          <div class="auth-tabs" role="tablist">
+            <button type="button" class="is-active" data-auth-tab="login" role="tab" aria-selected="true">Вход</button>
+            <button type="button" data-auth-tab="register" role="tab" aria-selected="false">Регистрация</button>
+          </div>
+
+          <!-- Форма входа -->
+          <form id="form-login" class="auth-form" autocomplete="on">
+            <div class="auth-field">
+              <label for="login-username">Имя пользователя</label>
+              <input id="login-username" type="text" name="username" required autocomplete="username" placeholder="Например: Alisa" />
+            </div>
+            <div class="auth-field">
+              <label for="login-pass">Пароль</label>
+              <div class="auth-password-field">
+                <input id="login-pass" type="password" name="password" required minlength="8" placeholder="••••••••" />
+                <button type="button" class="auth-password-toggle" onclick="togglePassword('login-pass', this)" aria-label="Показать пароль">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <p id="login-error" class="auth-error" role="alert" hidden></p>
+            <button type="submit" class="btn-auth-primary">Войти</button>
+          </form>
+
+          <!-- Форма регистрации -->
+          <form id="form-register" class="auth-form" hidden autocomplete="on">
+            <div class="auth-field">
+              <label for="reg-name">Имя пользователя</label>
+              <input id="reg-name" type="text" name="username" required maxlength="60" autocomplete="username" placeholder="Например: Лариса" />
+            </div>
+            <div class="auth-field">
+              <label for="reg-email">Email</label>
+              <input id="reg-email" type="email" name="email" required autocomplete="email" placeholder="name@example.com" />
+            </div>
+            <div class="auth-field">
+              <label for="reg-pass">Пароль</label>
+              <div class="auth-password-field">
+                <input id="reg-pass" type="password" name="password" required minlength="8" placeholder="Минимум 8 символов" />
+                <button type="button" class="auth-password-toggle" onclick="togglePassword('reg-pass', this)" aria-label="Показать пароль">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="auth-field">
+              <label for="reg-pass2">Повтор пароля</label>
+              <div class="auth-password-field">
+                <input id="reg-pass2" type="password" name="password2" required minlength="8" placeholder="Ещё раз" />
+                <button type="button" class="auth-password-toggle" onclick="togglePassword('reg-pass2', this)" aria-label="Показать пароль">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <p id="register-error" class="auth-error" role="alert" hidden></p>
+            <button type="submit" class="btn-auth-primary">Зарегистрироваться</button>
+          </form>
+
+          <!-- Кнопка "Забыли пароль?" -->
+          <div class="auth-forgot-container">
+            <button type="button" class="auth-link auth-forgot-btn" onclick="showResetPasswordForm()">
+              Забыли пароль?
+            </button>
+          </div>
+
+        </div>
+        <!-- === КОНЕЦ ОСНОВНОГО КОНТЕНТА === -->
+
+
+        <!-- === ФОРМА ВОССТАНОВЛЕНИЯ ПАРОЛЯ (скрыта по умолчанию) === -->
+        <div id="resetPasswordContent" class="auth-reset-form" hidden>
+          
+          <div class="auth-reset-header">
+            <button type="button" class="auth-back-btn" onclick="backToLogin()" aria-label="Назад ко входу">
+              ← Назад
+            </button>
+            <h3>Восстановление пароля</h3>
+          </div>
+          
+          <p class="auth-reset-subtitle">
+            Введите имя пользователя и новый пароль
+          </p>
+
+          <form id="resetPasswordForm">
+            <div class="auth-field">
+              <label for="resetUsername">Имя пользователя</label>
+              <input 
+                type="text" 
+                id="resetUsername" 
+                placeholder="Введите ваше имя пользователя"
+                required
+                autocomplete="username"
+              >
+            </div>
+            
+            <div class="auth-field">
+              <label for="newPassword">Новый пароль</label>
+              <div class="auth-password-field">
+                <input 
+                  type="password" 
+                  id="newPassword" 
+                  placeholder="Придумайте новый пароль"
+                  minlength="4"
+                  required
+                  autocomplete="new-password"
+                />
+                <button type="button" class="auth-password-toggle" onclick="togglePassword('newPassword', this)" aria-label="Показать пароль">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            
+            <div class="auth-field">
+              <label for="confirmPassword">Подтвердите пароль</label>
+              <div class="auth-password-field">
+                <input 
+                  type="password" 
+                  id="confirmPassword" 
+                  placeholder="Повторите новый пароль"
+                  minlength="4"
+                  required
+                  autocomplete="new-password"
+                />
+                <button type="button" class="auth-password-toggle" onclick="togglePassword('confirmPassword', this)" aria-label="Показать пароль">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            
+            <div id="resetError" class="auth-error" role="alert" hidden></div>
+            <div id="resetSuccess" class="auth-status" role="status" hidden></div>
+            
+            <button type="submit" class="btn-auth-primary">
+              Сохранить новый пароль
+            </button>
+          </form>
+          
+        </div>
+        <!-- === КОНЕЦ ФОРМЫ ВОССТАНОВЛЕНИЯ === -->
+
+      </div>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+</body>
+</html>
