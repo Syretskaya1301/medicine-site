@@ -1,0 +1,663 @@
+/* Страница входа — отдельный экран (версия для пожилых пользователей) */
+:root {
+  /* Светлая, тёплая палитра */
+  --auth-bg1: #f8b0c9;           /* Светлый фон */
+  --auth-bg2: #b97a7a;           /* Мягкий градиент */
+  --auth-accent: #2563eb;        /* Контрастный синий (лучше воспринимается, чем зелёный) */
+  --auth-accent-dim: rgba(37, 99, 235, 0.12);
+  --auth-text: #0f172a;          /* Тёмный текст для высокого контраста */
+  --auth-muted: #475569;         /* Читаемый вторичный текст */
+  --auth-card: rgba(255, 255, 255, 0.92); /* Светлая карточка */
+  --auth-border: rgba(15, 23, 42, 0.12);   /* Мягкая граница */
+  --auth-glow: rgba(37, 99, 235, 0.18);    /* Лёгкое свечение */
+  --auth-success: #16a34a;       /* Зелёный для успеха */
+  --auth-error: #dc2626;         /* Чёткий красный для ошибок */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body.auth-page {
+  font-family: "Outfit", system-ui, sans-serif;
+  color: var(--auth-text);
+  background: var(--auth-bg1);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  /* Увеличенный базовый размер шрифта для лучшей читаемости */
+  font-size: 1.05rem;
+}
+
+.auth-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: 100vh;
+}
+
+@media (max-width: 900px) {
+  .auth-panel {
+    position: static;
+    transform: none;
+    padding: 1.5rem;
+    max-width: 100%;
+  }
+  
+  .auth-panel::before {
+    display: none; /* Убираем затемнение на мобильных */
+  }
+  
+  .auth-hero {
+    display: none; /* Скрываем левую часть на мобильных */
+  }
+}
+
+.auth-hero {
+  position: relative;
+  padding: clamp(2rem, 5vw, 4rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  /* Светлый, мягкий градиент вместо тёмного */
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 30%, rgba(37, 99, 235, 0.08) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 80% 70%, rgba(16, 185, 129, 0.06) 0%, transparent 50%),
+    linear-gradient(165deg, var(--auth-bg2) 0%, var(--auth-bg1) 100%);
+}
+
+.auth-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* Более контрастный узор для светлого фона */
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%230f172a' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: 1;
+  pointer-events: none;
+}
+
+.auth-hero__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 420px;
+}
+
+.auth-hero__badge {
+  display: inline-block;
+  font-size: 0.8rem; /* Чуть крупнее */
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--auth-accent);
+  margin-bottom: 1rem;
+  background: var(--auth-accent-dim);
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+}
+
+.auth-hero h1 {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: clamp(2rem, 4.5vw, 2.75rem); /* Крупнее заголовок */
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0 0 1rem;
+  letter-spacing: -0.01em;
+  color: var(--auth-text);
+}
+
+.auth-hero p {
+  margin: 0;
+  font-size: 1.15rem; /* Крупнее текст */
+  color: var(--auth-muted);
+  line-height: 1.7;
+}
+
+.auth-hero__pills {
+  margin-top: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.auth-pill {
+  font-size: 0.875rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--auth-border);
+  color: var(--auth-text);
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.auth-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  padding: 2rem;
+  background: transparent;
+  border: none;
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 900px) {
+  .auth-panel {
+    border-left: none;
+    border-top: 1px solid var(--auth-border);
+    padding-bottom: 3rem;
+  }
+
+  .auth-hero {
+    min-height: auto;
+    padding-bottom: 2rem;
+  }
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 2.25rem 2.25rem 2.5rem;
+  border-radius: 20px;
+  background: var(--auth-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--auth-border);
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.15);
+}
+
+.auth-card__logo {
+  width: 56px; /* Чуть крупнее */
+  height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.85rem;
+  background: linear-gradient(145deg, var(--auth-accent-dim), rgba(255, 255, 255, 0.6));
+  border: 1px solid var(--auth-border);
+  margin-bottom: 1.25rem;
+  color: var(--auth-accent);
+}
+
+.auth-card__title {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 1.65rem; /* Крупнее заголовок карточки */
+  font-weight: 700;
+  margin: 0 0 0.4rem;
+  color: var(--auth-text);
+}
+
+.auth-card__subtitle {
+  margin: 0 0 1.75rem;
+  font-size: 1rem;
+  color: var(--auth-muted);
+  line-height: 1.6;
+}
+
+.auth-tabs {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 1.75rem;
+  padding: 5px;
+  background: rgba(15, 23, 42, 0.04);
+  border-radius: 14px;
+  border: 1px solid var(--auth-border);
+}
+
+.auth-tabs button {
+  flex: 1;
+  padding: 0.65rem 0.85rem;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--auth-muted);
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.auth-tabs button.is-active {
+  background: #fff;
+  color: var(--auth-accent);
+  box-shadow: 0 3px 12px rgba(37, 99, 235, 0.15);
+  border: 1px solid var(--auth-border);
+}
+
+.auth-field {
+  margin-bottom: 1.25rem;
+}
+
+.auth-field label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--auth-muted);
+  margin-bottom: 0.5rem;
+}
+
+.auth-field input {
+  width: 100%;
+  padding: 0.9rem 1rem; /* Выше поле ввода */
+  border-radius: 12px;
+  border: 1.5px solid var(--auth-border);
+  background: #fff;
+  color: var(--auth-text);
+  font-family: inherit;
+  font-size: 1.05rem; /* Крупнее текст в поле */
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.auth-field input::placeholder {
+  color: rgba(71, 85, 105, 0.6);
+}
+
+.auth-field input:focus {
+  outline: none;
+  border-color: var(--auth-accent);
+  box-shadow: 0 0 0 4px var(--auth-accent-dim);
+  background: #fff;
+}
+
+.auth-error {
+  color: var(--auth-error);
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0 0 0.85rem;
+  min-height: 1.3em;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.auth-error::before {
+  content: "⚠";
+  font-size: 1.1rem;
+}
+
+.auth-error[hidden] {
+  display: none;
+}
+
+.btn-auth-primary {
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 1rem 1.25rem; /* Выше кнопка */
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(145deg, #3b82f6 0%, #2563eb 45%, #1d4ed8 100%);
+  color: #fff; /* Белый текст на синем — высокий контраст */
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 1.1rem; /* Крупнее текст кнопки */
+  cursor: pointer;
+  transition: transform 0.15s, filter 0.2s, box-shadow 0.2s;
+  box-shadow: 0 6px 24px rgba(37, 99, 235, 0.28);
+}
+
+.btn-auth-primary:hover {
+  filter: brightness(1.03);
+  box-shadow: 0 8px 30px rgba(37, 99, 235, 0.38);
+}
+
+.btn-auth-primary:active {
+  transform: scale(0.99);
+}
+
+.btn-auth-secondary {
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+  border: 1.5px solid var(--auth-border);
+  background: #fff;
+  color: var(--auth-text);
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.btn-auth-secondary:hover {
+  border-color: var(--auth-accent);
+  color: var(--auth-accent);
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.12);
+  background: var(--auth-accent-dim);
+}
+
+.btn-auth-secondary:active {
+  transform: scale(0.99);
+}
+
+.auth-links {
+  display: flex;
+  justify-content: flex-end;
+  margin: -0.25rem 0 1rem;
+}
+
+.auth-inline-actions {
+  display: flex;
+  gap: 0.85rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.auth-link {
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--auth-muted);
+  font: inherit;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.auth-link:hover {
+  color: var(--auth-accent);
+  border-bottom-color: var(--auth-accent);
+}
+
+.auth-status {
+  color: var(--auth-success);
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0.5rem 0 0;
+  min-height: 1.3em;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.auth-status::before {
+  content: "✓";
+}
+
+.auth-status[hidden] {
+  display: none;
+}
+
+.auth-form[hidden] {
+  display: none !important;
+}
+/* Затемнение фона для центрированного окна */
+.auth-panel::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: -1;
+}
+
+/* Дополнительные улучшения для доступности */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Подсветка фокуса для навигации с клавиатуры */
+.auth-field input:focus-visible,
+.auth-tabs button:focus-visible,
+.btn-auth-primary:focus-visible,
+.btn-auth-secondary:focus-visible,
+.auth-link:focus-visible {
+  outline: 3px solid var(--auth-accent);
+  outline-offset: 2px;
+}
+/* Кнопка "Забыли пароль" */
+.auth-forgot-container {
+  margin: 0.5rem 0 1rem;
+  text-align: center;
+}
+
+.auth-forgot-btn {
+  font-size: 0.9rem;
+  color: var(--auth-accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 0.25rem 0;
+}
+
+.auth-forgot-btn:hover {
+  color: var(--auth-text);
+}
+
+/* Модальное окно */
+.auth-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 1rem;
+}
+
+.auth-modal-content {
+  background: var(--auth-card);
+  border-radius: 20px;
+  padding: 2rem;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.2);
+  border: 1px solid var(--auth-border);
+  animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.auth-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.auth-modal-header h3 {
+  margin: 0;
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 1.4rem;
+  color: var(--auth-text);
+}
+
+.auth-modal-close {
+  background: none;
+  border: none;
+  font-size: 1.75rem;
+  color: var(--auth-muted);
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.auth-modal-close:hover {
+  background: rgba(15, 23, 42, 0.08);
+  color: var(--auth-text);
+}
+
+.auth-modal-body {
+  margin-top: 1rem;
+}
+
+
+
+
+
+/* === Переключение контента === */
+#authMainContent.hidden {
+  display: none;
+}
+
+.auth-reset-form[hidden] {
+  display: none;
+}
+
+.auth-reset-form {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* === Заголовок формы восстановления === */
+.auth-reset-header {
+  margin-bottom: 1.25rem;
+}
+
+.auth-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 1rem;
+  background: rgba(15, 23, 42, 0.04);
+  border: 1px solid var(--auth-border);
+  border-radius: 10px;
+  color: var(--auth-muted);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.auth-back-btn:hover {
+  background: rgba(15, 23, 42, 0.08);
+  color: var(--auth-text);
+  border-color: rgba(15, 23, 42, 0.2);
+}
+
+.auth-reset-header h3 {
+  margin: 0;
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--auth-text);
+}
+
+.auth-reset-subtitle {
+  margin: 0 0 1.5rem;
+  color: var(--auth-muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* === Кнопка "Забыли пароль" === */
+.auth-forgot-container {
+  margin: 1rem 0 0;
+  text-align: center;
+}
+
+.auth-forgot-btn {
+  font-size: 0.9rem;
+  color: var(--auth-accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 0.25rem 0;
+}
+
+.auth-forgot-btn:hover {
+  color: var(--auth-text);
+}
+
+
+
+
+/* === Поле пароля с кнопкой показа === */
+.auth-password-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.auth-password-field input {
+  width: 100%;
+  padding-right: 48px;
+}
+
+.auth-password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--auth-muted);
+  transition: all 0.2s;
+  border-radius: 6px;
+  z-index: 1;
+}
+
+.auth-password-toggle:hover {
+  background: rgba(15, 23, 42, 0.06);
+  color: var(--auth-text);
+}
+
+.auth-password-toggle:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.auth-password-toggle.is-active {
+  color: var(--auth-accent);
+}
